@@ -103,12 +103,16 @@
     font-size:13px;
     text-align:left;
     line-height:1.5;
+    cursor:text;
 }
 
 .gr-flex-wrapper {
     display: flex;
     box-sizing: content-box;
     width:100%;
+    transform: translate3d(0, 0px, 0px);
+    user-select:none;
+    z-index:2;
 }
 
 
@@ -128,6 +132,7 @@
 }
 
 .gr-text {
+    cursor:text;
     text-align:left;
 }
 
