@@ -1,0 +1,160 @@
+.darkbg {
+    background-color: #000;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    position:fixed;
+}
+
+.gr-review-wrapper {
+    display:flex;
+    position:relative;
+    border-radius:8px;
+}
+
+.gr-review-wrapper:after {
+    content: '';
+    position: absolute;
+    top: calc(100% - 55px);
+    left: 45px;
+    width: 40px;
+    height: 36px;
+    transform: rotate(0deg) skewY(-35deg);
+    background: #fafafb;
+}
+
+.gr-review {
+    flex-grow:1;
+    flex-shrink:0;
+    width:320px;
+    position:relative;
+    height:auto;
+    padding:12px 12px 0 12px;
+    margin-bottom:20px;
+}
+
+.gr-review-bubble {
+    background-color: #fafafb;
+    border-radius:8px;
+    position:relative;
+    padding:20px;
+    z-index:1;
+    color:#777;
+}
+
+
+
+.gr-rating {
+    display:flex;
+    align-items:center;
+    margin-bottom:5px;
+    justify-content: space-between;
+}
+
+.gr-stars {
+    display: inline-flex;
+    vertical-align: middle;
+    align-items: center;
+    text-decoration: none;
+    border: none;
+    color: #e7711b;
+    fill: #e7711b;
+}
+
+.gr-logo {
+    padding:5px;
+}
+
+.gr-user {
+    display:flex;
+    align-items:stretch;
+}
+
+.gr-column {
+    display:inline-block;
+    padding:5px;
+}
+
+.google-user-image {
+    width: 50px;
+    height: 50px;
+    overflow:hidden;
+    display:flex;
+    border-radius:1000px;
+}
+
+.google-user-image > img {
+    max-width:100px;
+    max-height:100px;
+    border-radius:1000px;
+}
+
+.gr-name {
+    color: #427fed;
+    font-size:16px;
+    line-height:1.5;
+    font-weight:1000;
+    text-decoration: none;
+}
+
+.gr-date {
+    color: #999;
+    font-size:13px;
+    text-align:left;
+    line-height:1.5;
+}
+
+.gr-flex-wrapper {
+    display: flex;
+    box-sizing: content-box;
+    width:100%;
+}
+
+
+.gr-show-more,.gr-show-less {
+    margin-top: 5px;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 14px;
+    opacity: 0.6;
+    font-weight: 500;
+    color: #000;
+    margin-bottom:-10px;
+}
+
+.gr-display-none {
+    display:none;
+}
+
+.gr-text {
+    text-align:left;
+}
+
+.gr-text-wrapper {
+    text-align:Center;
+}
+
+.gr-text {
+    max-height:85px;
+    overflow:hidden;
+    position:relative;
+    display:block;
+    min-height:0;
+}
+
+.gr-text-gradient:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    z-index: 1;
+    height: 25px;
+    background: linear-gradient(rgba(250, 250, 251, 0) 0%, #fafafb 80%);
+}
+
+
+.gr-text-expanded {
+    max-height: 250px;
+}
