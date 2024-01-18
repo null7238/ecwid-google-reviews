@@ -83,6 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastX = 0;
 
     function sliderMove(e) {
+        e.preventDefault();
         if(mouseDown) {
             let x = e.x ?? e.touches[0].clientX;
             currentX = x - startX + lastX;
@@ -91,12 +92,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function sliderStart(e) {
+        e.preventDefault();
         let x = e.x ?? e.touches[0].clientX;
         startX = x;
         mouseDown = true;
     }
 
     function sliderEnd(e) {
+        e.preventDefault();
         mouseDown = false;
 
         if(currentX > 0) {
