@@ -10,6 +10,7 @@
     display:flex;
     position:relative;
     border-radius:8px;
+    touch-action: none;
 }
 
 .gr-review-wrapper:after {
