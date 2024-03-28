@@ -2,5 +2,8 @@
   "dependencies": {
     "file-firstline-replace": "^0.0.3",
     "puppeteer": "^22.6.1"
+  },
+  "scripts": {
+    "scrape": "node scraper.js"
   }
 }

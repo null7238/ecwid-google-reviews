@@ -18,6 +18,14 @@ async function scrollToBottom(page) {
     });
 }
 
+async function hasLoader(page) {
+    const loader = await page.evaluate(() => {
+        let loader = document.querySelector('.jfk-activityIndicator');
+        return !!loader;
+    });
+
+    return loader;
+}
 
 (async () => {
     const browser = await puppeteer.launch({headless: false});
@@ -44,16 +52,14 @@ async function scrollToBottom(page) {
 
     while(true) {
         await scrollToBottom(page);
-        //console.log('scroll to bottom, wait for loader to appear');
+
         try {
         await page.waitForSelector('.jfk-activityIndicator', {hidden: false, timeout: 2000});
         } catch(e) {}
 
-        //console.log('ok loader is here, wait for it to disappear');
         await page.waitForSelector('.jfk-activityIndicator', {hidden: true, timeout: 20000});
-        //console.log('ok loader is gone');
 
-        if(!(await page.$('.jfk-activityIndicator'))) {
+        if(!(await hasLoader(page))) {
             let newHeight = await scrollHeight(page);
 
             if(newHeight == height) {
@@ -121,8 +127,6 @@ async function scrollToBottom(page) {
     } else {
         throw new error('old reviews are larger than new ones');
     }
-    
-
 
     await browser.close();
 })();
