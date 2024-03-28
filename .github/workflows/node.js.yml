@@ -21,6 +21,10 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run scrape
+    - name: set email
+      run: git config user.email "automation@lattasoft.com"
+    - name: set name
+      run: git config user.name "Automation"
     - name: check for changes
       run: git status
     - name: stage changed files
