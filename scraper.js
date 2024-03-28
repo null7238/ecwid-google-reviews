@@ -48,6 +48,10 @@ async function hasLoader(page) {
         newestButton.click();
     });
 
+    await new Promise(r => setTimeout(r, 2000));
+    //await page.waitForSelector('.review-loading', {hidden: false, timeout: 10000});
+    //await page.waitForSelector('.review-loading', {hidden: true, timeout: 10000});
+
     let height = -1;
 
     while(true) {
@@ -70,12 +74,6 @@ async function hasLoader(page) {
             height = newHeight;
         }
     }
-
-
-    await scrollToBottom(page);
-    height = await scrollHeight(page);
-    console.log(height);
-
 
     const reviews = await page.evaluate(() => {
         const allReviews = document.body.querySelectorAll('div[jscontroller="fIQYlf"]');
@@ -109,6 +107,9 @@ async function hasLoader(page) {
 
         return savedReviews;
     });
+
+    console.log("Latest review")
+    console.log(reviews[0])
 
     var filePath = './google-reviews.js'
     var newLine = 'const reviews = ' + JSON.stringify(reviews)
