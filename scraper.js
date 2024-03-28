@@ -28,7 +28,7 @@ async function hasLoader(page) {
 }
 
 (async () => {
-    const browser = await puppeteer.launch({headless: false});
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.goto('https://www.google.com/search?q=concrete+blonde+aquatics');
 
