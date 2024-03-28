@@ -31,7 +31,5 @@ jobs:
       run: git add .
     - name: commit changed files
       run: git commit -m "Auto updating google-reviews.js"
-    - name: fetch from master
-      run: git fetch origin master
-    - name: push code to master
-      run: git push origin HEAD:master
+    - name: push code
+      run: git push
