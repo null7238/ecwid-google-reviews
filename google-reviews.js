@@ -52,25 +52,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const review = reviews[i];
         const html = newReview;
         
+        if(review.rating >= 3) {
+          const template = document.createElement('div');
+          template.innerHTML = html;
+          template.querySelector('.gr-text').innerText = review.reviewText.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '');
+          template.querySelector('.google-user-image img').alt = review.title;
+          template.querySelector('.gr-name').innerText = review.title;
+          template.querySelector('.gr-date').innerText = review.time;
 
-        const template = document.createElement('div');
-        template.innerHTML = html;
-        template.querySelector('.gr-text').innerText = review.reviewText.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '');
-        template.querySelector('.google-user-image img').alt = review.title;
-        template.querySelector('.gr-name').innerText = review.title;
-        template.querySelector('.gr-date').innerText = review.time;
+          template.querySelector('.google-user-image img').src = review.picture;
+          const starWrapper = template.querySelector('.gr-stars');
 
-        template.querySelector('.google-user-image img').src = review.picture;
-        const starWrapper = template.querySelector('.gr-stars');
+          for(let s = 0; s < review.rating; s++) {
+              const starTemplate = document.createElement('svg');
+              starTemplate.innerHTML = star;
+              starWrapper.append(starTemplate);
+          }
 
-        for(let s = 0; s < review.rating; s++) {
-            const starTemplate = document.createElement('svg');
-            starTemplate.innerHTML = star;
-            starWrapper.append(starTemplate);
+          flexWrapper.append(template);
         }
-        
-
-        flexWrapper.append(template);
     }
 
 
