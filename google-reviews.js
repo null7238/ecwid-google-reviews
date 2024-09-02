@@ -112,6 +112,13 @@ document.addEventListener('DOMContentLoaded', function() {
         lastX = currentX;  
     }
 
+    function sendHeightToParent() {
+      let wrapper = document.querySelector(".gr-flex-wrapper");
+      let height = wrapper.scrollHeight;
+      parent.postMessage(height, 'https://cbaquatics.ca');
+      console.log(height);
+    }
+
     flexWrapper.addEventListener("mousemove",sliderMove);
     flexWrapper.addEventListener("mousedown",sliderStart);
     flexWrapper.addEventListener("mouseup",sliderEnd);
@@ -135,6 +142,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             this.classList.add('gr-display-none');
             this.parentNode.querySelector('.gr-show-less').classList.remove('gr-display-none');
+
+            sendHeightToParent();
          },false);
     });
 
@@ -146,23 +155,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
             this.classList.add('gr-display-none');
             this.parentNode.querySelector('.gr-show-more').classList.remove('gr-display-none');
+
+            sendHeightToParent();
          },false);
     });
 
-    
-
-    function sendHeightToParent() {
-      let wrapper = document.querySelector(".gr-flex-wrapper");
-      let height = wrapper.scrollHeight;
-      parent.postMessage(height, 'https://cbaquatics.ca');
-      console.log(height);
-    }
-
     window.onload = sendHeightToParent;
-    
-    let wrapper = document.querySelector('.gr-flex-wrapper');
-    if (wrapper) {
-        var observer = new MutationObserver(sendHeightToParent);
-        observer.observe(wrapper, { childList: true, subtree: true });
-    }
 });
