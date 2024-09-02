@@ -149,11 +149,20 @@ document.addEventListener('DOMContentLoaded', function() {
          },false);
     });
 
+    
+
     function sendHeightToParent() {
-      var height = document.body.scrollHeight;
+      let wrapper = document.querySelector(".gr-flex-wrapper");
+      let height = wrapper.scrollHeight;
       parent.postMessage(height, 'https://cbaquatics.ca');
+      console.log(height);
     }
 
     window.onload = sendHeightToParent;
-    window.onresize = sendHeightToParent;
+    
+    let wrapper = document.querySelector('.gr-flex-wrapper');
+    if (wrapper) {
+        var observer = new MutationObserver(sendHeightToParent);
+        observer.observe(wrapper, { childList: true, subtree: true });
+    }
 });
