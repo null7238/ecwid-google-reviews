@@ -148,4 +148,12 @@ document.addEventListener('DOMContentLoaded', function() {
             this.parentNode.querySelector('.gr-show-more').classList.remove('gr-display-none');
          },false);
     });
+
+    function sendHeightToParent() {
+      var height = document.body.scrollHeight;
+      parent.postMessage(height, 'cbaquatics.ca');
+    }
+
+    window.onload = sendHeightToParent;
+    window.onresize = sendHeightToParent;
 });
