@@ -116,7 +116,6 @@ document.addEventListener('DOMContentLoaded', function() {
       let wrapper = document.querySelector(".gr-flex-wrapper");
       let height = wrapper.scrollHeight;
       parent.postMessage(height, 'https://cbaquatics.ca');
-      console.log(height);
     }
 
     flexWrapper.addEventListener("mousemove",sliderMove);
