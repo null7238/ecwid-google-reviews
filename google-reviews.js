@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function sendHeightToParent() {
       var height = document.body.scrollHeight;
-      parent.postMessage(height, 'cbaquatics.ca');
+      parent.postMessage(height, 'https://cbaquatics.ca');
     }
 
     window.onload = sendHeightToParent;
