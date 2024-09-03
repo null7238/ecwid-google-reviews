@@ -83,6 +83,7 @@ async function hasLoader(page) {
             const review = allReviews[i];
 
             const title = review.querySelector('div[class="TSUbDb"] a').innerText;
+            const profileHref = review.querySelector('div[class="TSUbDb"] a').href;
             const rating = review.querySelector('span[class="lTi8oc z3HNkc"]');
             const reviewText = review.querySelector('span[jscontroller="MZnM8e"]');
             const picture = review.querySelector('img[class="lDY1rd"]');
@@ -97,6 +98,7 @@ async function hasLoader(page) {
             if(reviewText) {
                 savedReviews.push({
                     title,
+                    profileHref,
                     rating: rating.getAttribute("aria-label").substring(6, 7),
                     reviewText: reviewText.innerText.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, ''),
                     picture: picture.src,
