@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
           template.querySelector('.gr-text').innerText = review.reviewText.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '');
           template.querySelector('.google-user-image img').alt = review.title;
           template.querySelector('.gr-name').innerText = review.title;
+          template.querySelector('.gr-name').href = review.profileHref;
           template.querySelector('.gr-date').innerText = review.time;
 
           template.querySelector('.google-user-image img').src = review.picture;
