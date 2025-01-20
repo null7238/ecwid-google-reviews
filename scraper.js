@@ -35,8 +35,8 @@ async function hasLoader(page) {
 }
 
 (async () => {
-    const userAgent = randomUseragent.getRandom();
-    const UA = userAgent || USER_AGENT;
+    //const userAgent = randomUseragent.getRandom();
+    //const UA = userAgent || USER_AGENT;
 
     const browser = await puppeteer.launch(
         /*{
@@ -46,9 +46,32 @@ async function hasLoader(page) {
     );
     const page = await browser.newPage();
 
-    await page.setUserAgent(UA);
+    await page.setUserAgent(USER_AGENT);
     await page.setJavaScriptEnabled(true);
     await page.setDefaultNavigationTimeout(0);
+
+    await page.setExtraHTTPHeaders({
+        //'sec-ch-prefers-color-scheme': 'light',
+        'sec-ch-ua': '"Google Chrome";v="131", "Chromium";v="131", ";Not A Brand";v="99"',
+        //'sec-ch-ua-arch': 'x86',
+        //'sec-ch-ua-bitness': '64',
+        //'sec-ch-ua-form-factors': 'Desktop',
+        //'sec-ch-ua-full-version': '132.0.6834.83',
+        //'sec-ch-ua-full-version-list': '"Not A(Brand";v="8.0.0.0", "Chromium";v="132.0.6834.83", "Google Chrome";v="132.0.6834.83"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': 'Windows',
+        //'referer': 'https://www.google.com/',
+        //'sec-ch-ua-platform-version:': '10.0.0',
+        //'sec-ch-ua-wow64': '?0',
+        'sec-fetch-dest': 'document',
+        'sec-fetch-mode': 'navigate',
+        'sec-fetch-site': 'same-origin',
+        'sec-fetch-user': '?1',
+        //'x-browser-channel':'stable',
+        //'x-browser-copyright':'Copyright 2025 Google LLC. All rights reserved.',
+        //'x-browser-validation':'Ty5481SnuDG2fxASUTOpmh9tIrU=',
+        //'x-browser-year':'2025'
+    })
 
     await page.setViewport({
         width: 1920 + Math.floor(Math.random() * 100),
@@ -59,9 +82,14 @@ async function hasLoader(page) {
         isMobile: false,
     });
 
-    await page.goto('https://www.google.com/search?q=concrete+blonde+aquatics+winnipeg', { waitUntil: 'networkidle2' });
+    console.log("navigating to search page");
+    await page.goto('https://www.google.com/search?q=concrete+blonde+aquatics+winnipeg&r=1234567', { waitUntil: 'networkidle2' });
+    
+    console.log("search page loaded");
+    //await new Promise(r => setTimeout(r, 10000));
 
     await page.evaluate(() => {
+        console.log("Clicking on google reviews button");
         let xpath = "//span[contains(text(),'Google reviews')]";
         let googleReviewButton = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
 
@@ -71,6 +99,7 @@ async function hasLoader(page) {
     await page.waitForSelector('.review-dialog-list')
 
     await page.evaluate(() => {
+        console.log("Sorting by newest");
         let xpath = "//span[contains(text(),'Newest')]";
         let newestButton = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
 
