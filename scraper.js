@@ -7,7 +7,7 @@ const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
 
 async function scrollHeight(page) {
     const scrollHeight = await page.evaluate(() => {
-        let reviewList = document.querySelector('.review-dialog-list');
+        let reviewList = document.querySelector('div.dS8AEf');
         return reviewList.scrollHeight;
     });
 
@@ -16,14 +16,23 @@ async function scrollHeight(page) {
 
 async function scrollToBottom(page) {
     await page.evaluate(() => {
-        let reviewList = document.querySelector('.review-dialog-list');
-        reviewList.scrollTo(0, reviewList.scrollHeight);
+
+        
+        let loader = document.querySelector('.qjESne');
+
+        if(loader) {
+            loader.scrollIntoView()
+        } else {
+            let reviewList = document.querySelector('div.dS8AEf');
+            reviewList.scrollTo(0, 99999999999999);
+        }
     });
 }
 
 async function hasLoader(page) {
     const loader = await page.evaluate(() => {
-        let loader = document.querySelector('.jfk-activityIndicator');
+        let loader = document.querySelector('.qjESne');
+
         return !!loader;
     });
 
@@ -32,11 +41,9 @@ async function hasLoader(page) {
 
 (async () => {
     
-    const headlessBrowser = process.env.HEADLESS !== 'false'
-    
     const browser = await puppeteer.launch(
         {
-            headless: headlessBrowser,
+            headless: true,
             args: ['--window-size=1920,1080']
         }
     );
@@ -81,7 +88,7 @@ async function hasLoader(page) {
     
     //throw new Error('we got a captcha instead of the page we were expecting')
     console.log("navigating to search page");
-    await page.goto('https://www.google.com/search?q=concrete+blonde+aquatics+winnipeg', { waitUntil: 'networkidle2' });
+    await page.goto('https://www.google.com/maps/place/Concrete+Blonde+Aquatics/@49.9114608,-97.1076163,706m/data=!3m1!1e3!4m8!3m7!1s0x52ea712bf6671901:0x6975ea7e720d8784!8m2!3d49.9114608!4d-97.1050414!9m1!1b1!16s%2Fg%2F11fkcwj4c6?entry=ttu', { waitUntil: 'networkidle2' });
 
     const url = await page.url();
     console.log(`${url} has been loaded`);
@@ -89,41 +96,39 @@ async function hasLoader(page) {
     if(url.includes('sorry')) {
         throw new Error('captcha detected');
     }
-    
-    await page.evaluate(() => {
-        console.log("Clicking on google reviews button");
-        let xpath = "//span[contains(text(),'Google reviews')]";
-        let googleReviewButton = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
 
-        googleReviewButton.click();
+    console.log("Clicking on sort");
+    await page.evaluate(() => {
+        let xpath = "//span[contains(text(),'Sort')]";
+        let sortButton = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+
+        sortButton.click();
     });
 
-    await page.waitForSelector('.review-dialog-list')
+    await new Promise(r => setTimeout(r, 100));
+
+
+    console.log("Sorting by newest");
 
     await page.evaluate(() => {
-        console.log("Sorting by newest");
-        let xpath = "//span[contains(text(),'Newest')]";
+        let xpath = "//div[contains(text(),'Newest')]";
         let newestButton = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
 
-        newestButton.click();
+        newestButton.click();        
     });
-
-    await new Promise(r => setTimeout(r, 2000));
-    //await page.waitForSelector('.review-loading', {hidden: false, timeout: 10000});
-    //await page.waitForSelector('.review-loading', {hidden: true, timeout: 10000});
 
     let height = -1;
 
     while(true) {
+        let currentHeight = await scrollHeight(page);
+
+        console.log(`scroll to bottom, current height ${currentHeight}`)
         await scrollToBottom(page);
 
-        try {
-        await page.waitForSelector('.jfk-activityIndicator', {hidden: false, timeout: 2000});
-        } catch(e) {}
-
-        await page.waitForSelector('.jfk-activityIndicator', {hidden: true, timeout: 20000});
+        await new Promise(r => setTimeout(r, 200));
 
         if(!(await hasLoader(page))) {
+            console.log('no loader found, check height')
             let newHeight = await scrollHeight(page);
 
             if(newHeight == height) {
@@ -135,36 +140,49 @@ async function hasLoader(page) {
         }
     }
 
+    await page.evaluate(() => {
+        const allReviews = document.body.querySelectorAll('div.jftiEf');
+
+        for (i = 0; i < allReviews.length; ++i) {
+            const review = allReviews[i];
+            const more = review.querySelector('button[aria-label="See more"]');
+
+            if(more) {
+                more.click();
+            }
+        }
+    });
+
+    await new Promise(r => setTimeout(r, 1000));
+    await scrollToBottom(page);
+
     const reviews = await page.evaluate(() => {
-        const allReviews = document.body.querySelectorAll('div[jscontroller="fIQYlf"]');
+        const allReviews = document.body.querySelectorAll('div.jftiEf');
         let savedReviews = [];
 
         for (i = 0; i < allReviews.length; ++i) {
             const review = allReviews[i];
 
-            const title = review.querySelector('div[class="TSUbDb"] a').innerText;
-            const profileHref = review.querySelector('div[class="TSUbDb"] a').href;
-            const rating = review.querySelector('span[class="lTi8oc z3HNkc"]');
-            const reviewText = review.querySelector('span[jscontroller="MZnM8e"]');
-            const picture = review.querySelector('img[class="lDY1rd"]');
-            const more = review.querySelector('a[class="review-more-link"]');
-            const time = review.querySelector('span[class="dehysf lTi8oc"]');
-
+            const title = review.querySelector('div.d4r55').innerText;
+            const profileHref = review.querySelector('button.al6Kxe').getAttribute('data-href');
+            const rating = review.querySelector('span.kvMYJc');
+            const reviewText = review.querySelector('span.wiI7pd');
+            const picture = review.querySelector('img[class="NBa7we"]');
+            const more = review.querySelector('button[aria-label="See more"]');
+            const time = review.querySelector('span[class="rsqaWe"]');
             
             if(more) {
                 more.click();
             }
 
-            if(reviewText) {
-                savedReviews.push({
-                    title,
-                    profileHref,
-                    rating: rating.getAttribute("aria-label").substring(6, 7),
-                    reviewText: reviewText.innerText.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, ''),
-                    picture: picture.src,
-                    time: time.innerText
-                })
-            }
+            savedReviews.push({
+                title,
+                profileHref,
+                rating: rating.getAttribute("aria-label").substring(0, 1),
+                reviewText: reviewText ? reviewText.innerText.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '') : '',
+                picture: picture.src,
+                time: time.innerText
+            })
         }
 
         return savedReviews;
@@ -180,15 +198,15 @@ async function hasLoader(page) {
     let newLength = reviews.length
     let oldLength = JSON.parse(content[0].replace('const reviews = ', '')).length;
 
-    if(newLength >= oldLength) {
-        console.log("We had " + oldLength + " reviews now we have " + newLength);
+    console.log("We had " + oldLength + " reviews now we have " + newLength);
 
+    if(newLength >= oldLength) {
         content[0] = newLine;
         content = content.join('\n');
 
         fs.writeFileSync(filePath, content);
     } else {
-        throw new error('old reviews are larger than new ones');
+        throw new Error(`there are missing reviews. exit`);
     }
 
     await browser.close();
