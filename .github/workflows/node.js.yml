@@ -30,6 +30,6 @@ jobs:
     - name: stage changed files
       run: git add .
     - name: commit changed files
-      run: git commit -m "Auto updating google-reviews.js"
+      run: git commit --allow-empty -m "Auto updating google-reviews.js"
     - name: push code
       run: git push
