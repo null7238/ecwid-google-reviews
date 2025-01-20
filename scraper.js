@@ -32,10 +32,11 @@ async function hasLoader(page) {
 
 (async () => {
     
+    const headless = process.env.HEADLESS || true
     
     const browser = await puppeteer.launch(
         {
-            headless: false,
+            headless: headless,
             args: ['--window-size=1920,1080']
         }
     );
