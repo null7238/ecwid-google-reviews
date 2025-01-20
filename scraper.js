@@ -86,15 +86,9 @@ async function hasLoader(page) {
     const url = await page.url();
     console.log(`${url} has been loaded`);
 
-    return;
-
     if(url.includes('sorry')) {
         throw new Error('we got a captcha instead of the page we were expecting')
     }
-    
-
-    return;
-    await new Promise(r => setTimeout(r, 10000));
 
     await page.evaluate(() => {
         console.log("Clicking on google reviews button");
