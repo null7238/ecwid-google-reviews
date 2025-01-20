@@ -30,7 +30,9 @@ async function hasLoader(page) {
 (async () => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.goto('https://www.google.com/search?q=concrete+blonde+aquatics', { waitUntil: 'networkidle0' });
+    await page.goto('https://www.google.com/search?q=concrete+blonde+aquatics+winnipeg', { waitUntil: 'networkidle0' });
+
+    await page.waitForSelector('.kp-wholepage-osrp')
 
     await page.evaluate(() => {
         let xpath = "//span[contains(text(),'Google reviews')]";
