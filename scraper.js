@@ -32,11 +32,11 @@ async function hasLoader(page) {
 
 (async () => {
     
-    const headless = process.env.HEADLESS || true
+    const headlessBrowser = process.env.HEADLESS !== 'false'
     
     const browser = await puppeteer.launch(
         {
-            headless: headless,
+            headless: headlessBrowser,
             args: ['--window-size=1920,1080']
         }
     );
@@ -79,17 +79,17 @@ async function hasLoader(page) {
         isMobile: false,
     });
     
-
+    //throw new Error('we got a captcha instead of the page we were expecting')
     console.log("navigating to search page");
     await page.goto('https://www.google.com/search?q=concrete+blonde+aquatics+winnipeg', { waitUntil: 'networkidle2' });
-    
+
     const url = await page.url();
     console.log(`${url} has been loaded`);
 
     if(url.includes('sorry')) {
-        throw new Error('we got a captcha instead of the page we were expecting')
+        throw new Error('captcha detected');
     }
-
+    
     await page.evaluate(() => {
         console.log("Clicking on google reviews button");
         let xpath = "//span[contains(text(),'Google reviews')]";
