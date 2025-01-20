@@ -1,5 +1,4 @@
-//const puppeteer = require('puppeteer');
-const { connect } = require("puppeteer-real-browser")
+const puppeteer = require('puppeteer');
 
 const fs = require('fs');
 const { error } = require('console');
@@ -32,29 +31,16 @@ async function hasLoader(page) {
 }
 
 (async () => {
-    const { browser, page } = await connect({
-        //headless: false,
-        args: [],
-
-        customConfig: {},
-
-        turnstile: true,
-
-        connectOption: {},
-
-        disableXvfb: false,
-        ignoreAllFlags: false
-    });
     
     
-    /*    const browser = await puppeteer.launch(
+    const browser = await puppeteer.launch(
         {
             headless: false,
             args: ['--window-size=1920,1080']
         }
     );
     const page = await browser.newPage();
-*/
+
 
     await page.setUserAgent(USER_AGENT);
     await page.setJavaScriptEnabled(true);
