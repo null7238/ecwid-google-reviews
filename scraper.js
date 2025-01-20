@@ -46,7 +46,7 @@ async function hasLoader(page) {
     );
     const page = await browser.newPage();
 
-    await page.setUserAgent(USER_AGENT);
+    await page.setUserAgent(UA);
     await page.setJavaScriptEnabled(true);
     await page.setDefaultNavigationTimeout(0);
 
@@ -60,8 +60,6 @@ async function hasLoader(page) {
     });
 
     await page.goto('https://www.google.com/search?q=concrete+blonde+aquatics+winnipeg', { waitUntil: 'networkidle2' });
-
-    await page.waitForSelector('.kp-wholepage-osrp')
 
     await page.evaluate(() => {
         let xpath = "//span[contains(text(),'Google reviews')]";
