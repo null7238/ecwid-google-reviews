@@ -39,10 +39,10 @@ async function hasLoader(page) {
     //const UA = userAgent || USER_AGENT;
 
     const browser = await puppeteer.launch(
-        /*{
+        {
             headless: false,
             args: ['--window-size=1920,1080']
-        }*/
+        }
     );
     const page = await browser.newPage();
 
@@ -83,10 +83,18 @@ async function hasLoader(page) {
     });
 
     console.log("navigating to search page");
-    await page.goto('https://www.google.com/search?q=concrete+blonde+aquatics+winnipeg&r=1234567', { waitUntil: 'networkidle2' });
+    await page.goto('https://www.google.com/search?q=concrete+blonde+aquatics+winnipeg', { waitUntil: 'networkidle2' });
     
-    console.log("search page loaded");
-    //await new Promise(r => setTimeout(r, 10000));
+    const url = await page.url();
+    console.log(`${url} has been loaded`);
+
+    if(url.includes('sorry')) {
+        throw new Error('we got a captcha instead of the page we were expecting')
+    }
+    
+
+    return;
+    await new Promise(r => setTimeout(r, 10000));
 
     await page.evaluate(() => {
         console.log("Clicking on google reviews button");
