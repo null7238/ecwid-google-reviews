@@ -39,10 +39,10 @@ async function hasLoader(page) {
     //const UA = userAgent || USER_AGENT;
 
     const browser = await puppeteer.launch(
-        {
+        /*{
             headless: false,
             args: ['--window-size=1920,1080']
-        }
+        }*/
     );
     const page = await browser.newPage();
 
