@@ -1,6 +1,13 @@
-const puppeteer = require('puppeteer');
+const randomUseragent = require('random-useragent');
+//const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-extra');
+const Stealth = require('puppeteer-extra-plugin-stealth');
 const fs = require('fs');
 const { error } = require('console');
+
+puppeteer.use(Stealth());
+
+const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36';
 
 async function scrollHeight(page) {
     const scrollHeight = await page.evaluate(() => {
@@ -28,9 +35,31 @@ async function hasLoader(page) {
 }
 
 (async () => {
-    const browser = await puppeteer.launch();
+    const userAgent = randomUseragent.getRandom();
+    const UA = userAgent || USER_AGENT;
+
+    const browser = await puppeteer.launch(
+        /*{
+            headless: false,
+            args: ['--window-size=1920,1080']
+        }*/
+    );
     const page = await browser.newPage();
-    await page.goto('https://www.google.com/search?q=concrete+blonde+aquatics+winnipeg', { waitUntil: 'networkidle0' });
+
+    await page.setUserAgent(USER_AGENT);
+    await page.setJavaScriptEnabled(true);
+    await page.setDefaultNavigationTimeout(0);
+
+    await page.setViewport({
+        width: 1920 + Math.floor(Math.random() * 100),
+        height: 3000 + Math.floor(Math.random() * 100),
+        deviceScaleFactor: 1,
+        hasTouch: false,
+        isLandscape: false,
+        isMobile: false,
+    });
+
+    await page.goto('https://www.google.com/search?q=concrete+blonde+aquatics+winnipeg', { waitUntil: 'networkidle2' });
 
     await page.waitForSelector('.kp-wholepage-osrp')
 
