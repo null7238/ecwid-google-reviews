@@ -1,11 +1,8 @@
-const randomUseragent = require('random-useragent');
 //const puppeteer = require('puppeteer');
-const puppeteer = require('puppeteer-extra');
-const Stealth = require('puppeteer-extra-plugin-stealth');
+const { connect } = require("puppeteer-real-browser")
+
 const fs = require('fs');
 const { error } = require('console');
-
-puppeteer.use(Stealth());
 
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36';
 
@@ -35,16 +32,29 @@ async function hasLoader(page) {
 }
 
 (async () => {
-    //const userAgent = randomUseragent.getRandom();
-    //const UA = userAgent || USER_AGENT;
+    const { browser, page } = await connect({
+        //headless: false,
+        args: [],
 
-    const browser = await puppeteer.launch(
-        /*{
+        customConfig: {},
+
+        turnstile: true,
+
+        connectOption: {},
+
+        disableXvfb: false,
+        ignoreAllFlags: false
+    });
+    
+    
+    /*    const browser = await puppeteer.launch(
+        {
             headless: false,
             args: ['--window-size=1920,1080']
-        }*/
+        }
     );
     const page = await browser.newPage();
+*/
 
     await page.setUserAgent(USER_AGENT);
     await page.setJavaScriptEnabled(true);
@@ -81,12 +91,15 @@ async function hasLoader(page) {
         isLandscape: false,
         isMobile: false,
     });
+    
 
     console.log("navigating to search page");
     await page.goto('https://www.google.com/search?q=concrete+blonde+aquatics+winnipeg', { waitUntil: 'networkidle2' });
     
     const url = await page.url();
     console.log(`${url} has been loaded`);
+
+    return;
 
     if(url.includes('sorry')) {
         throw new Error('we got a captcha instead of the page we were expecting')
@@ -198,4 +211,5 @@ async function hasLoader(page) {
     }
 
     await browser.close();
+    
 })();
