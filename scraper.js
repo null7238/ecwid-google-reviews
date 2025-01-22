@@ -118,11 +118,9 @@ async function hasLoader(page) {
     });
 
     let height = -1;
+    console.log(`scroll to bottom of reviews`)
 
     while(true) {
-        let currentHeight = await scrollHeight(page);
-
-        console.log(`scroll to bottom, current height ${currentHeight}`)
         await scrollToBottom(page);
 
         await new Promise(r => setTimeout(r, 200));
