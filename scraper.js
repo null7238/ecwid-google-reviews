@@ -138,6 +138,7 @@ async function hasLoader(page) {
         }
     }
 
+    console.log(`click all the more buttons`)
     await page.evaluate(() => {
         const allReviews = document.body.querySelectorAll('div.jftiEf');
 
@@ -154,6 +155,7 @@ async function hasLoader(page) {
     await new Promise(r => setTimeout(r, 1000));
     await scrollToBottom(page);
 
+    console.log(`scrape all the reviews`)
     const reviews = await page.evaluate(() => {
         const allReviews = document.body.querySelectorAll('div.jftiEf');
         let savedReviews = [];
